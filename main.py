@@ -33,10 +33,13 @@
 import os, sys, subprocess, time
 from re import findall, sub
 from colorama import Fore, Style
+from Crypto.Cipher import AES
+from base64 import b64encode, b64decode
+import hashlib
 
 class PyStegano():
 
-    def __init__(self):
+    def __init__(self, salt='SlTKeYOpHygTYkP3'):
 
         # Time
         self.lt = time.localtime()
@@ -64,6 +67,12 @@ class PyStegano():
         # Path
         self.path = None
 
+        # Enc Dec
+        self.salt = salt
+        self.enc_dec_meth0 = 'utf-8'
+        self.message = None
+        self.ciphertext = None
+
     def out(self):
 
         subprocess.call("clear", shell=True)
@@ -72,6 +81,7 @@ class PyStegano():
         print(Style.RESET_ALL)
 
     def input(self):
+
         # Make Choice
         while True:
             choice = str(input(self.time_hm + Fore.GREEN + " [+] Which option Number » "))
@@ -85,18 +95,26 @@ class PyStegano():
                     print(self.time_hm + Fore.RED + " [-] File is not readable")
                     print(Style.RESET_ALL)
                     continue
+            # Passphrase for encryption
+            while True:
+                key = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down your Passphrase for Encryption » "))
+                print(Style.RESET_ALL)
+                key_check = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down AGAIN your Passphrase for Encryption » "))
+                print(Style.RESET_ALL)
+                if key == key_check: break
+                else: continue
             # Return
             if choice == '1':
-                raw_txt = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down your passphrase » "))
+                message = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down your hidden Textpassage » "))
                 print(Style.RESET_ALL)
-                write_txt = "$- " + raw_txt + " -$"
-                return 'write', write_txt
+                return 'write', message, key
             if choice == '2':
-                return 'read', None
+                return 'read', None, key
             else:
                 sys.exit(0)
 
     def read(self):
+
         with open(self.path, encoding="ISO-8859-1", mode="r") as f:
 
             try:
@@ -107,16 +125,19 @@ class PyStegano():
                     byte = f.read(1)
                 raw_find = findall("\$- .* -\$", str)
                 for row in raw_find:
-                    read_txt = sub("\$- ", "", row)
-                    read_txt = sub(" -\$", "", read_txt)
+                    ciphertext = sub("\$- ", "", row)
+                    ciphertext = sub(" -\$", "", ciphertext)
+                    return ciphertext
             finally:
                 f.close()
-                return read_txt
 
-    def write(self, *, write_txt):
+    def write(self, *, ciphertext):
+
+        ciphertext = "$- " + ciphertext + " -$"
+
         with open(self.path, encoding="ISO-8859-1", mode="a+") as f:
 
-            f.write(write_txt)
+            f.write(ciphertext)
 
             try:
                 byte = f.read(1)
@@ -125,22 +146,48 @@ class PyStegano():
                     str = str + byte
                     byte = f.read(1)
                 print(str)
+                return True
             finally:
                 f.close()
-                return True
+
+    def enc(self, *, key, message):
+
+        key = hashlib.sha256(str.encode(key))
+        try:
+            iv = self.salt
+            aes_obj = AES.new(key.digest(), AES.MODE_CFB, iv)
+            hx_enc = aes_obj.encrypt(message)
+            ciphertext = b64encode(hx_enc).decode(self.enc_dec_meth0)
+            return ciphertext
+        except: print("Error")
+
+    def dec(self, *, key, ciphertext):
+
+        key = hashlib.sha256(str.encode(key))
+        try:
+            iv = self.salt
+            aes_obj = AES.new(key.digest(), AES.MODE_CFB, iv)
+            tmp = b64decode(ciphertext.encode(self.enc_dec_meth0))
+            hx_dec = aes_obj.decrypt(tmp)
+            message = hx_dec.decode(self.enc_dec_meth0)
+            return message
+        except: print("Error")
 
     def run(self):
+
         self.out()
-        op_mode, write_txt = self.input()
+        op_mode, message, key = self.input()
         if op_mode == 'write':
-            _true = self.write(write_txt=write_txt)
+            self.ciphertext = self.enc(key=key, message=message)
+            _true = self.write(ciphertext=self.ciphertext)
             if _true: print(self.time_hm + Fore.GREEN + " [+] Passphrase Succesfully saved")
             else: print(self.time_hm + Fore.RED + " [-] ERROR: Passphrase not saved")
         elif op_mode == 'read':
-            read_txt = self.read()
+            ciphertext = self.read()
+            message = self.dec(key=key, ciphertext=ciphertext)
             print(self.time_hm + Fore.GREEN + " [+] Sucessfully read Passphrase ↓")
             print(Style.RESET_ALL)
-            print(read_txt)
+            print(message)
 
 
 # TO BE CONTINUED ...
