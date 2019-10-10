@@ -1,4 +1,4 @@
-# PyStegano - Steganographie Tool to hide your Passphrases in Images
+# PyStegano - Steganographie Tool to hide your Passphrases in Files
 #
 # Creation:    09.10.2019
 # Last Update: 09.10.2019
