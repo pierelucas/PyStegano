@@ -97,11 +97,13 @@ class PyStegano():
                     continue
             # Passphrase for encryption
             while True:
-                key = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down your Passphrase for Encryption » "))
+                key = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down your Passphrase for Encryption (min. 8) » "))
                 print(Style.RESET_ALL)
-                key_check = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down AGAIN your Passphrase for Encryption » "))
+                key_check = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down AGAIN your Passphrase for Encryption (min. 8) » "))
                 print(Style.RESET_ALL)
-                if key == key_check: break
+                if key == key_check:
+                    if len(key) >= 8: break
+                    else: continue
                 else: continue
             # Return
             if choice == '1':
