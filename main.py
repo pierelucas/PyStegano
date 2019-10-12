@@ -30,7 +30,7 @@
 #
 # Modules
 #
-import os, sys, subprocess, time
+import os, sys, subprocess, time, getpass
 from re import findall, sub
 from colorama import Fore, Style
 from Crypto.Cipher import AES
@@ -189,7 +189,7 @@ class PyStegano():
             message = self.dec(key=key, ciphertext=ciphertext)
             print(self.time_hm + Fore.GREEN + " [+] Sucessfully decrypt and read textpassage ↓")
             print(Style.RESET_ALL)
-            print(message)
+            print(self.time_hm + Fore.CYAN + " »» " + message + " «« ")
 
 
 # TO BE CONTINUED ...
