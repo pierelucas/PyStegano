@@ -188,8 +188,7 @@ class PyStegano():
             ciphertext = self.read()
             message = self.dec(key=key, ciphertext=ciphertext)
             print(self.time_hm + Fore.GREEN + " [+] Sucessfully decrypt your saved textpassage from " + Fore.CYAN + self.path + Fore.GREEN + " ↓")
-            print(Style.RESET_ALL)
-            print(self.time_hm + " » " + message)
+            print(self.time_hm + Fore.GREEN + " » " + Style.RESET_ALL + message)
 
 
 # TO BE CONTINUED ...
