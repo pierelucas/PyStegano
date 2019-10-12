@@ -122,17 +122,17 @@ class PyStegano():
     def read_salt(self):
 
         try:
-            if os.path.isfile("salt.pl"):
-                with open("salt.pl", 'rb') as f:
+            if os.path.isfile("salt.pystegano"):
+                with open("salt.pystegano", 'rb') as f:
                     self.salt = f.read()
-            elif not os.path.isfile("salt.pl"): self.gen_salt()
+            elif not os.path.isfile("salt.pystegano"): self.gen_salt()
         except PermissionError:
             print("Permission Error")
             sys.exit(0)
 
     def gen_salt(self):
 
-        with open("salt.pl", 'wb') as f:
+        with open("salt.pystegano", 'wb') as f:
             self.salt = Random.new().read(16)
             f.write(self.salt)
             print(self.time_hm + Fore.RED + " [+] SALT GENERATED")
