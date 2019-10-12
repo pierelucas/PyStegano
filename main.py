@@ -30,7 +30,8 @@
 #
 # Modules
 #
-import os, sys, subprocess, time, getpass
+import os, sys, subprocess, time
+from getpass import getpass
 from re import findall, sub
 from colorama import Fore, Style
 from Crypto.Cipher import AES
@@ -97,9 +98,9 @@ class PyStegano():
                     continue
             # Passphrase for encryption
             while True:
-                key = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down your Passphrase for Encryption (min. 8) » "))
+                key = str(getpass(self.time_hm + Fore.GREEN + " [+] Wrote down your Passphrase for Encryption (min. 8) » "))
                 print(Style.RESET_ALL)
-                key_check = str(input(self.time_hm + Fore.GREEN + " [+] Wrote down AGAIN your Passphrase for Encryption (min. 8) » "))
+                key_check = str(getpass(self.time_hm + Fore.GREEN + " [+] Wrote down AGAIN your Passphrase for Encryption (min. 8) » "))
                 print(Style.RESET_ALL)
                 if key == key_check:
                     if len(key) >= 8: break
@@ -187,9 +188,9 @@ class PyStegano():
         elif op_mode == 'read':
             ciphertext = self.read()
             message = self.dec(key=key, ciphertext=ciphertext)
-            print(self.time_hm + Fore.GREEN + " [+] Sucessfully decrypt and read textpassage ↓")
+            print(self.time_hm + Fore.GREEN + " [+] Sucessfully decrypt your saved textpassage from " + Fore.CYAN + self.path + Fore.GREEN + " ↓")
             print(Style.RESET_ALL)
-            print(self.time_hm + Fore.CYAN + " »» " + message + " «« ")
+            print(self.time_hm + " » " + message)
 
 
 # TO BE CONTINUED ...
