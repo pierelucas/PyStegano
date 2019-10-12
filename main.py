@@ -161,7 +161,9 @@ class PyStegano():
             hx_enc = aes_obj.encrypt(message)
             ciphertext = b64encode(hx_enc).decode(self.enc_dec_meth0)
             return ciphertext
-        except: print("Error")
+        except:
+            print("Error")
+            sys.exit(0)
 
     def dec(self, *, key, ciphertext):
 
@@ -173,7 +175,9 @@ class PyStegano():
             hx_dec = aes_obj.decrypt(tmp)
             message = hx_dec.decode(self.enc_dec_meth0)
             return message
-        except: print("Error")
+        except:
+            print("Error")
+            sys.exit(0)
 
     def run(self):
 
