@@ -30,7 +30,7 @@
 #
 # Modules
 #
-import os, sys, subprocess, time
+import os, shutil, sys, subprocess, time
 from getpass import getpass
 from re import findall, sub
 from colorama import Fore, Style
@@ -131,7 +131,7 @@ class PyStegano():
             sys.exit(0)
 
     def gen_salt(self):
-
+        shutil.move("salt.pystegano", "salt_old.pystegano")
         with open("salt.pystegano", 'wb') as f:
             self.salt = Random.new().read(16)
             f.write(self.salt)
