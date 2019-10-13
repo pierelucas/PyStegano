@@ -131,6 +131,7 @@ class PyStegano():
             sys.exit(0)
 
     def gen_salt(self):
+
         shutil.move("salt.pystegano", "salt_old.pystegano")
         with open("salt.pystegano", 'wb') as f:
             self.salt = Random.new().read(16)
