@@ -30,7 +30,7 @@
 #
 # Modules
 #
-import os, shutil, sys, subprocess, time
+import os, shutil, sys, subprocess, time, string, random
 from getpass import getpass
 from re import findall, sub
 from colorama import Fore, Style
@@ -119,6 +119,10 @@ class PyStegano():
         else:
             sys.exit(0)
 
+    def rnd_str(self, stringlen=6):
+        letter = string.digits + string.ascii_lowercase
+        return "".join(random.choice(letter) for i in range(stringlen))
+
     def read_salt(self):
 
         try:
@@ -132,7 +136,7 @@ class PyStegano():
 
     def gen_salt(self):
 
-        shutil.move("salt.pystegano", "salt_old.pystegano")
+        shutil.move("salt.pystegano", "salt_old_" + self.rnd_str() + ".pystegano")
         with open("salt.pystegano", 'wb') as f:
             self.salt = Random.new().read(16)
             f.write(self.salt)
