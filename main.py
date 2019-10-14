@@ -65,7 +65,7 @@ class PyStegano():
                     [Else] Exit
                     
                     WARNING:
-                    [99] Generate new Salt.pl
+                    [99] Generate new Salt.pl // PyStegano will take a Backup of you old Salt!
                     """
 
         # Path
