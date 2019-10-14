@@ -120,6 +120,7 @@ class PyStegano():
             sys.exit(0)
 
     def rnd_str(self, stringlen=6):
+
         letter = string.digits + string.ascii_lowercase
         return "".join(random.choice(letter) for i in range(stringlen))
 
@@ -136,7 +137,7 @@ class PyStegano():
 
     def gen_salt(self):
 
-        shutil.move("salt.pystegano", "salt_old_" + self.rnd_str() + ".pystegano")
+        if os.path.isfile("salt.pystegano"): shutil.move("salt.pystegano", "salt_old_" + self.rnd_str() + ".pystegano")
         with open("salt.pystegano", 'wb') as f:
             self.salt = Random.new().read(16)
             f.write(self.salt)
