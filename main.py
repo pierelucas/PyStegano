@@ -124,6 +124,12 @@ class PyStegano():
         letter = string.digits + string.ascii_lowercase
         return "".join(random.choice(letter) for i in range(stringlen))
 
+    def path_name(self, path):
+
+        pn = os.path.dirname(path)
+        if pn != "": return pn
+        else: return "Aktive Directory"
+
     def read_salt(self):
 
         try:
@@ -137,12 +143,17 @@ class PyStegano():
 
     def gen_salt(self):
 
-        if os.path.isfile("salt.pystegano"): shutil.move("salt.pystegano", "salt_old_" + self.rnd_str() + ".pystegano")
+        if os.path.isfile("salt.pystegano"):
+            global backup_salt, backup_path
+            backup_salt = True
+            backup_path = "salt_old_" + self.rnd_str() + ".pystegano"
+            shutil.move("salt.pystegano", backup_path)
         with open("salt.pystegano", 'wb') as f:
             self.salt = Random.new().read(16)
             f.write(self.salt)
-            print(self.time_hm + Fore.RED + " [+] SALT GENERATED")
-            print(Style.RESET_ALL)
+        print(self.time_hm + Fore.RED + " [+] SALT GENERATED")
+        if backup_salt: print(self.time_hm + Fore.RED + " [+] BACKUP GENERATED: " + Fore.CYAN + backup_path + Fore.GREEN + " in " + Fore.CYAN + self.path_name(backup_path))
+        print(Style.RESET_ALL)
 
     def read(self):
 
@@ -217,12 +228,12 @@ class PyStegano():
         if op_mode == 'write':
             self.ciphertext = self.enc(key=key, message=message)
             _true = self.write(ciphertext=self.ciphertext)
-            if _true: print(self.time_hm + Fore.GREEN + " [+] Textpassage succesfully encrypted and saved to " + Fore.CYAN + self.path)
+            if _true: print(self.time_hm + Fore.GREEN + " [+] Textpassage succesfully encrypted and saved to " + Fore.CYAN + self.path + Fore.GREEN + " in " + Fore.CYAN + self.path_name(self.path))
             else: print(self.time_hm + Fore.RED + " [-] ERROR: Textpassage not saved")
         elif op_mode == 'read':
             ciphertext = self.read()
             message = self.dec(key=key, ciphertext=ciphertext)
-            print(self.time_hm + Fore.GREEN + " [+] Sucessfully decrypt your saved textpassage from " + Fore.CYAN + self.path + Fore.GREEN + " ↓")
+            print(self.time_hm + Fore.GREEN + " [+] Sucessfully decrypt your saved textpassage from " + Fore.CYAN + self.path + Fore.GREEN + " in " + Fore.CYAN + self.path_name(self.path) + Fore.GREEN + " ↓")
             print(self.time_hm + Fore.GREEN + " » " + Style.RESET_ALL + message)
 
 
