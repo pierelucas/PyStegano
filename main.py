@@ -216,7 +216,7 @@ class PyStegano():
         if op_mode == 'write':
             self.ciphertext = self.enc(key=key, message=message)
             _true = self.write(ciphertext=self.ciphertext)
-            if _true: print(self.time_hm + Fore.GREEN + " [+] Textpassage succesfully encrypted and saved")
+            if _true: print(self.time_hm + Fore.GREEN + " [+] Textpassage succesfully encrypted and saved to " + Fore.CYAN + self.path)
             else: print(self.time_hm + Fore.RED + " [-] ERROR: Textpassage not saved")
         elif op_mode == 'read':
             ciphertext = self.read()
