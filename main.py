@@ -57,7 +57,7 @@ class PyStegano():
            V 1.7   \/            \/           \/_____/     \/     \/        
            
                     Coded by PiereLucas | github.com/pierelucas
-           """
+       """
 
         self.menu_txt = """
                     [1] Write
@@ -85,7 +85,6 @@ class PyStegano():
         print(Style.RESET_ALL)
 
     def input(self):
-
         choice = str(input(self.time_hm + Fore.GREEN + " [+] Which option Number » "))
         print(Style.RESET_ALL)
         # Gen Salt
@@ -120,18 +119,15 @@ class PyStegano():
             sys.exit(0)
 
     def rnd_str(self, stringlen=6):
-
         letter = string.digits + string.ascii_lowercase
         return "".join(random.choice(letter) for i in range(stringlen))
 
     def path_name(self, path):
-
         pn = os.path.dirname(path)
         if pn != "": return pn
         else: return "Aktive Directory"
 
     def read_salt(self):
-
         try:
             if os.path.isfile("salt.pystegano"):
                 with open("salt.pystegano", 'rb') as f:
@@ -142,7 +138,6 @@ class PyStegano():
             sys.exit(0)
 
     def gen_salt(self):
-
         if os.path.isfile("salt.pystegano"):
             global backup_salt, backup_path
             backup_salt = True
@@ -156,7 +151,6 @@ class PyStegano():
         print(Style.RESET_ALL)
 
     def read(self):
-
         with open(self.path, encoding="ISO-8859-1", mode="r") as f:
             file_data = f.read()
             raw_find = findall("\$- .* -\$", file_data)
@@ -166,14 +160,12 @@ class PyStegano():
             return ciphertext
 
     def write(self, *, ciphertext):
-
         ciphertext = "$- " + ciphertext + " -$"
         with open(self.path, encoding="ISO-8859-1", mode="a+") as f:
             f.write(ciphertext)
         return True
 
     def enc(self, *, key, message):
-
         key = hashlib.sha256(str.encode(key))
         try:
             iv = self.salt
@@ -186,7 +178,6 @@ class PyStegano():
             sys.exit(0)
 
     def dec(self, *, key, ciphertext):
-
         key = hashlib.sha256(str.encode(key))
         try:
             iv = self.salt
@@ -200,7 +191,6 @@ class PyStegano():
             sys.exit(0)
 
     def run(self):
-
         self.out()
         self.read_salt()
         op_mode, message, key, _salt = self.input()
