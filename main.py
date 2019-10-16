@@ -158,39 +158,19 @@ class PyStegano():
     def read(self):
 
         with open(self.path, encoding="ISO-8859-1", mode="r") as f:
-
-            try:
-                byte = f.read(1)
-                str = ""
-                while byte != "":
-                    str = str + byte
-                    byte = f.read(1)
-                raw_find = findall("\$- .* -\$", str)
-                for row in raw_find:
-                    ciphertext = sub("\$- ", "", row)
-                    ciphertext = sub(" -\$", "", ciphertext)
-                    return ciphertext
-            finally:
-                f.close()
+            file_data = f.read()
+            raw_find = findall("\$- .* -\$", file_data)
+            for row in raw_find:
+                ciphertext = sub("\$- ", "", row)
+                ciphertext = sub(" -\$", "", ciphertext)
+            return ciphertext
 
     def write(self, *, ciphertext):
 
         ciphertext = "$- " + ciphertext + " -$"
-
         with open(self.path, encoding="ISO-8859-1", mode="a+") as f:
-
             f.write(ciphertext)
-
-            try:
-                byte = f.read(1)
-                str = ""
-                while byte != "":
-                    str = str + byte
-                    byte = f.read(1)
-                print(str)
-                return True
-            finally:
-                f.close()
+        return True
 
     def enc(self, *, key, message):
 
@@ -239,5 +219,6 @@ class PyStegano():
 
 # TO BE CONTINUED ...
 
-stegano = PyStegano()
-stegano.run()
+if __name__ == '__main__':
+    stegano = PyStegano()
+    stegano.run()
